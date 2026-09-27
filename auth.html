@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}<div class="wrap"><div class="card form">
+<h1>{{'Masuk' if mode=='login' else 'Daftar Perusahaan'}}</h1>
+<p class="muted">{{'Akses dashboard procurement Anda.' if mode=='login' else 'Buat akun buyer atau supplier.'}}</p>
+<form method="post">
+{% if mode=='register' %}<div class="field"><label>Nama Perusahaan</label><input name="company" required></div>{% endif %}
+<div class="field"><label>Email</label><input type="email" name="email" required></div>
+<div class="field"><label>Password</label><input type="password" name="password" required></div>
+{% if mode=='register' %}<div class="field"><label>Tipe Akun</label><select name="role"><option value="buyer">Kontraktor / Buyer</option><option value="supplier">Supplier / Distributor</option></select></div>{% endif %}
+<button class="btn primary">{{'Masuk' if mode=='login' else 'Buat Akun'}}</button>
+</form>
+{% if mode=='login' %}<p class="small" style="margin-top:18px">Demo buyer: buyer@mepconnect.local / buyer123<br>Demo supplier: supplier@mepconnect.local / supplier123</p>{% endif %}
+</div></div>{% endblock %}

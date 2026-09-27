@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block content %}<section><div class="wrap"><div class="head"><h2>Buyer Dashboard</h2><p>{{session.company}} · Kelola RFQ dan pesanan proyek.</p></div>
+<div class="two"><div class="card"><h3>Buat RFQ</h3><form method="post" action="{{url_for('rfq')}}">
+<div class="field"><label>Material</label><input name="material" placeholder="Contoh: Kabel NYY 4 × 10 mm²" required></div>
+<div class="field"><label>Spesifikasi</label><textarea name="specification" rows="3"></textarea></div>
+<div class="field"><label>Quantity</label><input name="quantity" placeholder="2.000 meter" required></div>
+<div class="field"><label>Deadline</label><input type="date" name="deadline"></div>
+<button class="btn primary">Kirim RFQ</button></form></div>
+<div class="card"><h3>Alur</h3><p class="muted">RFQ Anda akan terlihat oleh supplier. Supplier dapat mengirim quotation, lalu Anda dapat memilih penawaran terbaik.</p><a class="btn outline" href="{{url_for('rfqs')}}">Lihat RFQ & Quotation</a></div></div>
+<h3 style="margin-top:35px">RFQ Saya</h3><table><tr><th>Material</th><th>Quantity</th><th>Status</th><th>Dibuat</th></tr>{% for r in rfqs %}<tr><td>{{r.material}}</td><td>{{r.quantity}}</td><td><span class="pill">{{r.status}}</span></td><td>{{r.created_at}}</td></tr>{% else %}<tr><td colspan="4">Belum ada RFQ.</td></tr>{% endfor %}</table>
+<h3 style="margin-top:35px">Pesanan</h3><table><tr><th>Produk</th><th>Supplier</th><th>Qty</th><th>Total</th><th>Status</th></tr>{% for o in orders %}<tr><td>{{o.product.name}}</td><td>{{o.supplier.company}}</td><td>{{o.quantity}}</td><td>Rp {{'{:,.0f}'.format(o.total).replace(',','.')}}</td><td><span class="pill">{{o.status}}</span></td></tr>{% else %}<tr><td colspan="5">Belum ada pesanan.</td></tr>{% endfor %}</table>
+</div></section>{% endblock %}

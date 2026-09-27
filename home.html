@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero"><div class="wrap">
+<span class="badge">B2B CONSTRUCTION PROCUREMENT · FROM BOQ TO DELIVERY</span>
+<h1>Pengadaan material MEP,<br>lebih cepat & terintegrasi.</h1>
+<p>MEPConnect menghubungkan kontraktor dan perusahaan konstruksi dengan supplier MEP terverifikasi. Cari material, minta quotation, bandingkan, pesan, dan pantau pengiriman.</p>
+{% if not user.get('user_id') %}<a class="btn primary" href="{{url_for('register')}}">Daftar Perusahaan →</a>{% else %}<a class="btn primary" href="{{url_for('dashboard')}}">Buka Dashboard →</a>{% endif %}
+<a class="btn outline" href="#produk">Jelajahi Material</a>
+</div></section>
+<section id="produk"><div class="wrap"><div class="head"><h2>Material MEP</h2><p>Demo katalog yang dapat diisi supplier.</p>
+<form class="search" onsubmit="searchProducts(event)"><input id="q" placeholder="Cari kabel, pipa, sprinkler, AC..."><button class="btn primary">Cari</button></form></div>
+<div class="grid" id="products">{% for p in products %}<div class="card product" data-search="{{(p.name+' '+p.category+' '+p.specification)|lower}}">
+<div class="icon">{% if p.category=='Electrical' %}⚡{% elif p.category=='Mechanical' %}❄️{% elif p.category=='Plumbing' %}💧{% else %}🔥{% endif %}</div>
+<h3>{{p.name}}</h3><div class="small">{{p.category}} · {{p.specification}}</div>
+<div class="row" style="margin-top:14px"><span class="price">Rp {{'{:,.0f}'.format(p.price).replace(',','.')}}/{{p.unit}}</span><span class="pill">✓ Verified</span></div>
+<div class="small" style="margin:10px 0">Supplier: {{p.supplier.company}} · Stok {{p.stock}}</div>
+{% if user.get('user_id') and user.get('role')=='buyer' %}<form method="post" action="{{url_for('buy',product_id=p.id)}}" class="row"><input name="quantity" type="number" min="1" max="{{p.stock}}" value="1" style="width:80px;padding:9px;border:1px solid #dce3ec;border-radius:8px"><button class="btn primary">Pesan</button></form>{% else %}<a class="btn outline" href="{{url_for('login')}}">Masuk untuk memesan</a>{% endif %}
+</div>{% endfor %}</div></div></section>
+<section><div class="wrap"><div class="head"><h2>Alur procurement</h2><p>From BOQ to Delivery.</p></div><div class="three">
+<div class="card"><b>01 · RFQ</b><h3>Kirim kebutuhan</h3><p class="muted">Masukkan material, spesifikasi, quantity, dan deadline.</p></div>
+<div class="card"><b>02 · Compare</b><h3>Bandingkan quotation</h3><p class="muted">Supplier memberikan harga dan lead time untuk dibandingkan.</p></div>
+<div class="card"><b>03 · Order</b><h3>Pesan & tracking</h3><p class="muted">Buat order dan pantau status pengiriman melalui dashboard.</p></div>
+</div></div></section>
+<script>
+function searchProducts(e){e.preventDefault();let q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('#products .product').forEach(x=>x.style.display=x.dataset.search.includes(q)?'block':'none')}
+</script>
+{% endblock %}

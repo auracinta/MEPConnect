@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mepconnect
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 2 --threads 4 --timeout 120 app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: DATABASE_URL
+        sync: false
